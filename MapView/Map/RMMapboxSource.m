@@ -218,8 +218,8 @@
     tileURLString = [tileURLString stringByReplacingOccurrencesOfString:@"{x}" withString:[[NSNumber numberWithInteger:x]    stringValue]];
     tileURLString = [tileURLString stringByReplacingOccurrencesOfString:@"{y}" withString:[[NSNumber numberWithInteger:y]    stringValue]];
 
-    if ([[UIScreen mainScreen] scale] > 1.0)
-        tileURLString = [tileURLString stringByReplacingOccurrencesOfString:@".png" withString:@"@2x.png"];
+    // if ([[UIScreen mainScreen] scale] > 1.0)
+    //     tileURLString = [tileURLString stringByReplacingOccurrencesOfString:@".png" withString:@"@2x.png"];
 
     if (_imageQuality != RMMapboxSourceQualityFull)
     {
