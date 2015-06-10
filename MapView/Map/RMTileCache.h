@@ -73,7 +73,7 @@ typedef enum : short {
 *   @param data The tile image data to be cached.
 *   @param tile The RMTile describing the map location of the image.
 *   @param cacheKey The key representing a certain cache. */
-- (void)addDiskCachedImageData:(NSData *)data forTile:(RMTile)tile withCacheKey:(NSString *)cacheKey;
+- (void)addDiskCachedImageData:(NSData *)data forTile:(RMTile)tile withCacheKey:(NSString *)cacheKey withLastUsed:(NSDate *)lastUsedDate;
 
 /** @name Clearing the Cache */
 

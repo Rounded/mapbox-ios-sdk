@@ -217,7 +217,7 @@
     });
 }
 
-- (void)addDiskCachedImageData:(NSData *)data forTile:(RMTile)tile withCacheKey:(NSString *)aCacheKey
+- (void)addDiskCachedImageData:(NSData *)data forTile:(RMTile)tile withCacheKey:(NSString *)aCacheKey withLastUsed:(NSDate *)lastUsedDate
 {
     if (!data || !aCacheKey)
         return;
@@ -226,8 +226,8 @@
 
         for (id <RMTileCache> cache in _tileCaches)
         {
-            if ([cache respondsToSelector:@selector(addDiskCachedImageData:forTile:withCacheKey:)])
-                [cache addDiskCachedImageData:data forTile:tile withCacheKey:aCacheKey];
+            if ([cache respondsToSelector:@selector(addDiskCachedImageData:forTile:withCacheKey:withLastUsed:)])
+                [cache addDiskCachedImageData:data forTile:tile withCacheKey:aCacheKey withLastUsed:lastUsedDate];
         }
 
     });
@@ -323,12 +323,17 @@
     return totalTiles;
 }
 
+//- (void)beginBackgroundCacheForTileSource:(id <RMTileSource>)tileSource southWest:(CLLocationCoordinate2D)southWest northEast:(CLLocationCoordinate2D)northEast minZoom:(NSUInteger)minZoom maxZoom:(NSUInteger)maxZoom andCacheForDuration:(double)seconds {
+//    
+//}
+
+
 - (void)beginBackgroundCacheForTileSource:(id <RMTileSource>)tileSource southWest:(CLLocationCoordinate2D)southWest northEast:(CLLocationCoordinate2D)northEast minZoom:(NSUInteger)minZoom maxZoom:(NSUInteger)maxZoom
 {
     if (self.isBackgroundCaching)
         return;
 
-    NSAssert([tileSource isKindOfClass:[RMAbstractWebMapSource class]], @"only web-based tile sources are supported for downloading");
+//    NSAssert([tileSource isKindOfClass:[RMAbstractWebMapSource class]], @"only web-based tile sources are supported for downloading");
 
     _activeTileSource = tileSource;
 

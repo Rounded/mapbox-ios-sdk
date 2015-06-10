@@ -41,7 +41,7 @@
     if (!(self = [super init]))
         return nil;
 
-    NSAssert([_source isKindOfClass:[RMAbstractWebMapSource class]], @"only web-based tile sources are supported for downloading");
+//    NSAssert([_source isKindOfClass:[RMAbstractWebMapSource class]], @"only web-based tile sources are supported for downloading");
 
     _tile   = tile;
     _source = source;
@@ -88,7 +88,8 @@
         }
         else
         {
-            [_cache addDiskCachedImageData:data forTile:_tile withCacheKey:[_source uniqueTilecacheKey]];
+//             explicitly set the lastUsed date to far in the future (180 days)
+            [_cache addDiskCachedImageData:data forTile:_tile withCacheKey:[_source uniqueTilecacheKey] withLastUsed:[NSDate dateWithTimeIntervalSinceNow:(60*60*24*180)]];
         }
     }
 }
