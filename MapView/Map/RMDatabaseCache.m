@@ -256,14 +256,14 @@
             lastUsedDate = [NSDate date];
         }
         
-        NSLog(@"Date: %@", lastUsedDate);
+        // NSLog(@"Date: %@", lastUsedDate);
         
         NSUInteger tilesInDb = [self count];
 
         if (_capacity <= tilesInDb && _expiryPeriod == 0)
             [self purgeTiles:MAX(_minimalPurge, 1+tilesInDb-_capacity)];
 
-        RMLog(@"DB cache     insert tile %d %d %d (%@)", tile.x, tile.y, tile.zoom, [RMTileCache tileHash:tile]);
+        // RMLog(@"DB cache     insert tile %d %d %d (%@)", tile.x, tile.y, tile.zoom, [RMTileCache tileHash:tile]);
 
         // Don't add new images to the database while there are still more than kWriteQueueLimit
         // insert operations pending. This prevents some memory issues.
