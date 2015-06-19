@@ -63,28 +63,28 @@
 
 + (NSString *)dbPathUsingCacheDir:(BOOL)useCacheDir
 {
-	NSArray *paths;
+    NSArray *paths;
 
-	if (useCacheDir)
-		paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
-	else
-		paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
+    if (useCacheDir)
+        paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
+    else
+        paths = NSSearchPathForDirectoriesInDomains(NSDocumentDirectory, NSUserDomainMask, YES);
 
-	if ([paths count] > 0) // Should only be one...
-	{
-		NSString *cachePath = [paths objectAtIndex:0];
+    if ([paths count] > 0) // Should only be one...
+    {
+        NSString *cachePath = [paths objectAtIndex:0];
 
-		// check for existence of cache directory
-		if ( ![[NSFileManager defaultManager] fileExistsAtPath: cachePath])
-		{
-			// create a new cache directory
-			[[NSFileManager defaultManager] createDirectoryAtPath:cachePath withIntermediateDirectories:NO attributes:nil error:nil];
-		}
+        // check for existence of cache directory
+        if ( ![[NSFileManager defaultManager] fileExistsAtPath: cachePath])
+        {
+            // create a new cache directory
+            [[NSFileManager defaultManager] createDirectoryAtPath:cachePath withIntermediateDirectories:NO attributes:nil error:nil];
+        }
 
-		return [cachePath stringByAppendingPathComponent:@"RMTileCache.db"];
-	}
+        return [cachePath stringByAppendingPathComponent:@"RMTileCache.db"];
+    }
 
-	return nil;
+    return nil;
 }
 
 - (void)configureDBForFirstUse
@@ -102,10 +102,10 @@
 
 - (id)initWithDatabase:(NSString *)path
 {
-	if (!(self = [super init]))
-		return nil;
+    if (!(self = [super init]))
+        return nil;
 
-	self.databasePath = path;
+    self.databasePath = path;
 
     _writeQueue = [NSOperationQueue new];
     [_writeQueue setMaxConcurrentOperationCount:1];
@@ -113,30 +113,30 @@
 
     _queue = [FMDatabaseQueue databaseQueueWithPath:path];
 
-	if (!_queue)
-	{
-		RMLog(@"Could not connect to database");
+    if (!_queue)
+    {
+        RMLog(@"Could not connect to database");
 
         [[NSFileManager defaultManager] removeItemAtPath:path error:NULL];
 
         return nil;
-	}
+    }
 
     [_queue inDatabase:^(FMDatabase *db) {
         [db setCrashOnErrors:NO];
         [db setShouldCacheStatements:TRUE];
     }];
 
-	[self configureDBForFirstUse];
+    [self configureDBForFirstUse];
 
     _tileCount = [self countTiles];
 
-	return self;	
+    return self;    
 }
 
 - (id)initUsingCacheDir:(BOOL)useCacheDir
 {
-	return [self initWithDatabase:[RMDatabaseCache dbPathUsingCacheDir:useCacheDir]];
+    return [self initWithDatabase:[RMDatabaseCache dbPathUsingCacheDir:useCacheDir]];
 }
 
 - (void)dealloc
@@ -150,12 +150,12 @@
 
 - (void)setPurgeStrategy:(RMCachePurgeStrategy)theStrategy
 {
-	_purgeStrategy = theStrategy;
+    _purgeStrategy = theStrategy;
 }
 
 - (void)setCapacity:(NSUInteger)theCapacity
 {
-	_capacity = theCapacity;
+    _capacity = theCapacity;
 }
 
 - (NSUInteger)capacity
@@ -165,7 +165,7 @@
 
 - (void)setMinimalPurge:(NSUInteger)theMinimalPurge
 {
-	_minimalPurge = theMinimalPurge;
+    _minimalPurge = theMinimalPurge;
 }
 
 - (void)setExpiryPeriod:(NSTimeInterval)theExpiryPeriod
@@ -182,7 +182,7 @@
 
 - (UIImage *)cachedImage:(RMTile)tile withCacheKey:(NSString *)aCacheKey
 {
-//	RMLog(@"DB cache check for tile %d %d %d", tile.x, tile.y, tile.zoom);
+//  RMLog(@"DB cache check for tile %d %d %d", tile.x, tile.y, tile.zoom);
 
     __block UIImage *cachedImage = nil;
 
@@ -239,7 +239,7 @@
 
 //    RMLog(@"DB cache     hit    tile %d %d %d (%@)", tile.x, tile.y, tile.zoom, [RMTileCache tileHash:tile]);
 
-	return cachedImage;
+    return cachedImage;
 }
 
 - (void)addImage:(UIImage *)image forTile:(RMTile)tile withCacheKey:(NSString *)aCacheKey
@@ -256,14 +256,14 @@
             lastUsedDate = [NSDate date];
         }
         
-        // NSLog(@"Date: %@", lastUsedDate);
+//        NSLog(@"Date: %@", lastUsedDate);
         
         NSUInteger tilesInDb = [self count];
 
         if (_capacity <= tilesInDb && _expiryPeriod == 0)
             [self purgeTiles:MAX(_minimalPurge, 1+tilesInDb-_capacity)];
 
-        // RMLog(@"DB cache     insert tile %d %d %d (%@)", tile.x, tile.y, tile.zoom, [RMTileCache tileHash:tile]);
+//        RMLog(@"DB cache     insert tile %d %d %d (%@)", tile.x, tile.y, tile.zoom, [RMTileCache tileHash:tile]);
 
         // Don't add new images to the database while there are still more than kWriteQueueLimit
         // insert operations pending. This prevents some memory issues.
@@ -297,7 +297,7 @@
             else
                 _tileCount++;
         }];
-	}
+    }
 }
 
 #pragma mark -
@@ -327,7 +327,7 @@
 
     [_writeQueueLock unlock];
 
-	return count;
+    return count;
 }
 
 - (void)purgeTiles:(NSUInteger)count
