@@ -189,6 +189,12 @@ typedef enum : NSUInteger {
 *   @param animated Whether to animate the change to the map center. */
 - (void)setCenterCoordinate:(CLLocationCoordinate2D)coordinate animated:(BOOL)animated;
 
+/** Set the map center to a given coordinate. (custom by Brian Weinreich)
+ *   @param coordinate A coordinate to set as the map center.
+ *   @param animated Whether to animate the change to the map center.
+ *   @param completion Fired when the scrollview finishes scrolling. */
+- (void)setCenterCoordinate:(CLLocationCoordinate2D)centerCoordinate animated:(BOOL)animated completion:(void (^)(void))complete;
+
 /** Set the map center to a given projected point. 
 *   @param aPoint A projected point to set as the map center. 
 *   @param animated Whether to animate the change to the map center. */

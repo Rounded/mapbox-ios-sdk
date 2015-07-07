@@ -46,9 +46,9 @@
 
 - (void)setContentOffset:(CGPoint)contentOffset animated:(BOOL)animated
 {
-    if (self.mapScrollViewDelegate)
+    if (self.mapScrollViewDelegate) {
         [self.mapScrollViewDelegate scrollView:self correctedContentOffset:&contentOffset];
-
+    }
     if ( ! [[NSDecimalNumber notANumber] isEqualToNumber:@(contentOffset.x)] &&
          ! [[NSDecimalNumber notANumber] isEqualToNumber:@(contentOffset.y)])
     {

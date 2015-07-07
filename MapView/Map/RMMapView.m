@@ -971,6 +971,19 @@
     [self setCenterProjectedPoint:[_projection coordinateToProjectedPoint:centerCoordinate] animated:animated];
 }
 
+- (void)setCenterCoordinate:(CLLocationCoordinate2D)centerCoordinate animated:(BOOL)animated completion:(void (^)(void))complete {
+    [self setCenterCoordinate:centerCoordinate animated:animated];
+    if (complete) {
+        __block __weak id notification;
+        notification = [[NSNotificationCenter defaultCenter] addObserverForName:@"RMScrollViewDidEndScrollingAnimation" object:nil queue:NSOperationQueuePriorityNormal usingBlock:^(NSNotification *note) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [[NSNotificationCenter defaultCenter] removeObserver:notification];
+                complete();
+            });
+        }];
+    }
+}
+
 // ===
 
 - (RMProjectedPoint)centerProjectedPoint
@@ -1446,6 +1459,7 @@
 
 - (void)scrollViewDidEndScrollingAnimation:(UIScrollView *)scrollView
 {
+    [[NSNotificationCenter defaultCenter] postNotificationName:@"RMScrollViewDidEndScrollingAnimation" object:nil];
     [self completeMoveEventAfterDelay:0];
 }
 
