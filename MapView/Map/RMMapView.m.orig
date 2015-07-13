@@ -318,10 +318,41 @@
     {
         [self setBackgroundView:nil];
     }
+<<<<<<< HEAD
+
+    if ([_earlyTileSources count])
+    {
+        for (id<RMTileSource>earlyTileSource in _earlyTileSources)
+        {
+            if (initialTileSourceMinZoomLevel < earlyTileSource.minZoom) initialTileSourceMinZoomLevel = earlyTileSource.minZoom;
+            if (initialTileSourceMaxZoomLevel > earlyTileSource.maxZoom) initialTileSourceMaxZoomLevel = earlyTileSource.maxZoom;
+        }
+    }
+    else
+    {
+        if (initialTileSourceMinZoomLevel < newTilesource.minZoom) initialTileSourceMinZoomLevel = newTilesource.minZoom;
+        if (initialTileSourceMaxZoomLevel > newTilesource.maxZoom) initialTileSourceMaxZoomLevel = newTilesource.maxZoom;
+    }
+    [self setTileSourcesMinZoom:initialTileSourceMinZoomLevel];
+    [self setTileSourcesMaxZoom:initialTileSourceMaxZoomLevel];
+    [self setTileSourcesZoom:initialTileSourceZoomLevel];
+
+    if ([_earlyTileSources count])
+    {
+        [self setTileSources:_earlyTileSources];
+        [_earlyTileSources removeAllObjects];
+    }
+    else
+    {
+        [self setTileSource:newTilesource];
+    }
+
+=======
     self.displayHeadingCalibration = YES;
     _mapTransform = CGAffineTransformIdentity;
     _annotationTransform = CATransform3DIdentity;
     
+>>>>>>> 6e71d21ff837b6a2cea54a1fdcf0aa59c3b8f914
     [self setCenterCoordinate:initialCenterCoordinate animated:NO];
     [self setDecelerationMode:RMMapDecelerationFast];
     self.showLogoBug = YES;
@@ -400,7 +431,13 @@
 {
     if (!newTilesource || !(self = [super initWithFrame:frame]))
         return nil;
+<<<<<<< HEAD
+
+    _earlyTileSources = [NSMutableArray array];
+
+=======
     
+>>>>>>> 6e71d21ff837b6a2cea54a1fdcf0aa59c3b8f914
     [self performInitializationWithTilesource:newTilesource
                              centerCoordinate:initialCenterCoordinate
                                     zoomLevel:initialZoomLevel
@@ -422,6 +459,16 @@
     return self;
 }
 
+<<<<<<< HEAD
+- (id)initWithCoder:(NSCoder *)decoder
+{
+    if (![super initWithCoder:decoder])
+        return nil;
+
+    _earlyTileSources = [NSMutableArray array];
+
+    return self;
+=======
 - (void)loadTilesWithCenterCoordinate:(CLLocationCoordinate2D)initialCenterCoordinate
                             zoomLevel:(float)initialZoomLevel
                          maxZoomLevel:(float)maxZoomLevel
@@ -436,6 +483,7 @@
         
         [self.delegate mapViewDidFinishLoadingMap];
     }];
+>>>>>>> 6e71d21ff837b6a2cea54a1fdcf0aa59c3b8f914
 }
 
 - (void)setFrame:(CGRect)frame
