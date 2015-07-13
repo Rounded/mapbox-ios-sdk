@@ -163,7 +163,7 @@
 
 + (NSNumber *)tileHash:(RMTile)tile
 {
-	return [NSNumber numberWithUnsignedLongLong:RMTileKey(tile)];
+    return [NSNumber numberWithUnsignedLongLong:RMTileKey(tile)];
 }
 
 - (UIImage *)cachedImage:(RMTile)tile withCacheKey:(NSString *)aCacheKey
@@ -209,7 +209,7 @@
     dispatch_sync(_tileCacheQueue, ^{
 
         for (id <RMTileCache> cache in _tileCaches)
-        {	
+        {   
             if ([cache respondsToSelector:@selector(addImage:forTile:withCacheKey:)])
                 [cache addImage:image forTile:tile withCacheKey:aCacheKey];
         }
@@ -235,7 +235,7 @@
 
 - (void)didReceiveMemoryWarning
 {
-	LogMethod();
+    LogMethod();
 
     [_memoryCache didReceiveMemoryWarning];
 
@@ -432,20 +432,28 @@
 {
     __weak NSOperationQueue *weakBackgroundFetchQueue = _backgroundFetchQueue;
     __weak RMTileCache *weakSelf = self;
-
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void)
     {
         dispatch_sync(dispatch_get_main_queue(), ^(void)
         {
-            [weakBackgroundFetchQueue cancelAllOperations];
-            [weakBackgroundFetchQueue waitUntilAllOperationsAreFinished];
-
-            if ([weakSelf markCachingComplete])
-            {
-                if ([_backgroundCacheDelegate respondsToSelector:@selector(tileCacheDidCancelBackgroundCache:)])
+            @try {
+                [weakBackgroundFetchQueue cancelAllOperations];
+                [weakBackgroundFetchQueue waitUntilAllOperationsAreFinished];
+                
+                if ([weakSelf markCachingComplete])
                 {
-                    [_backgroundCacheDelegate tileCacheDidCancelBackgroundCache:weakSelf];
+                    if ([_backgroundCacheDelegate respondsToSelector:@selector(tileCacheDidCancelBackgroundCache:)])
+                    {
+                        [_backgroundCacheDelegate tileCacheDidCancelBackgroundCache:weakSelf];
+                    }
                 }
+            }
+            @catch (NSException *exception) {
+                
+            }
+            @finally {
+                
             }
         });
     });
@@ -505,8 +513,8 @@ static NSMutableDictionary *predicateValues = nil;
 {
     NSUInteger capacity = 32;
 
-	NSNumber *capacityNumber = [cfg objectForKey:@"capacity"];
-	if (capacityNumber != nil)
+    NSNumber *capacityNumber = [cfg objectForKey:@"capacity"];
+    if (capacityNumber != nil)
         capacity = [capacityNumber unsignedIntegerValue];
 
     NSArray *predicates = [cfg objectForKey:@"predicates"];
@@ -530,7 +538,7 @@ static NSMutableDictionary *predicateValues = nil;
         }
     }
 
-	return [[RMMemoryCache alloc] initWithCapacity:capacity];
+    return [[RMMemoryCache alloc] initWithCapacity:capacity];
 }
 
 - (id <RMTileCache>)databaseCacheWithConfig:(NSDictionary *)cfg
