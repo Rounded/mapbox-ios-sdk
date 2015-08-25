@@ -430,33 +430,41 @@
 
 - (void)cancelBackgroundCache
 {
-    __weak NSOperationQueue *weakBackgroundFetchQueue = _backgroundFetchQueue;
-    __weak RMTileCache *weakSelf = self;
-    
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void)
-    {
-        dispatch_sync(dispatch_get_main_queue(), ^(void)
-        {
-            @try {
-                [weakBackgroundFetchQueue cancelAllOperations];
-                [weakBackgroundFetchQueue waitUntilAllOperationsAreFinished];
-                
-                if ([weakSelf markCachingComplete])
-                {
-                    if ([_backgroundCacheDelegate respondsToSelector:@selector(tileCacheDidCancelBackgroundCache:)])
-                    {
-                        [_backgroundCacheDelegate tileCacheDidCancelBackgroundCache:weakSelf];
-                    }
-                }
-            }
-            @catch (NSException *exception) {
-                
-            }
-            @finally {
-                
-            }
-        });
-    });
+    @try {
+        __weak NSOperationQueue *weakBackgroundFetchQueue = _backgroundFetchQueue;
+        __weak RMTileCache *weakSelf = self;
+        
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void)
+       {
+           dispatch_sync(dispatch_get_main_queue(), ^(void)
+                         {
+                             @try {
+                                 [weakBackgroundFetchQueue cancelAllOperations];
+                                 [weakBackgroundFetchQueue waitUntilAllOperationsAreFinished];
+                                 
+                                 if ([weakSelf markCachingComplete])
+                                 {
+                                     if ([_backgroundCacheDelegate respondsToSelector:@selector(tileCacheDidCancelBackgroundCache:)])
+                                     {
+                                         [_backgroundCacheDelegate tileCacheDidCancelBackgroundCache:weakSelf];
+                                     }
+                                 }
+                             }
+                             @catch (NSException *exception) {
+                                 
+                             }
+                             @finally {
+                                 
+                             }
+                         });
+       });
+    }
+    @catch (NSException *exception) {
+        NSLog(@"This code always crashes...");
+    }
+    @finally {
+        
+    }
 }
 
 @end
