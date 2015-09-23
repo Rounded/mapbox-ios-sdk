@@ -40,7 +40,15 @@
     if ( ! [[NSDecimalNumber notANumber] isEqualToNumber:@(contentOffset.x)] &&
          ! [[NSDecimalNumber notANumber] isEqualToNumber:@(contentOffset.y)])
     {
-        [super setContentOffset:contentOffset];
+        @try {
+            [super setContentOffset:contentOffset];
+        }
+        @catch (NSException *exception) {
+            // Can't set content offset :(
+        }
+        @finally {
+            
+        }
     }
 }
 
