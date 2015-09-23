@@ -334,7 +334,7 @@
         return;
 
 //    NSAssert([tileSource isKindOfClass:[RMAbstractWebMapSource class]], @"only web-based tile sources are supported for downloading");
-
+    
     _activeTileSource = tileSource;
 
     _backgroundFetchQueue = [NSOperationQueue new];
@@ -431,33 +431,25 @@
 - (void)cancelBackgroundCache
 {
     @try {
-        __weak NSOperationQueue *weakBackgroundFetchQueue = _backgroundFetchQueue;
-        __weak RMTileCache *weakSelf = self;
+//        __weak NSOperationQueue *weakBackgroundFetchQueue = _backgroundFetchQueue;
+//        __weak RMTileCache *weakSelf = self;
         
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void)
-       {
-           dispatch_sync(dispatch_get_main_queue(), ^(void)
-                         {
-                             @try {
-                                 [weakBackgroundFetchQueue cancelAllOperations];
-                                 [weakBackgroundFetchQueue waitUntilAllOperationsAreFinished];
-                                 
-                                 if ([weakSelf markCachingComplete])
-                                 {
-                                     if ([_backgroundCacheDelegate respondsToSelector:@selector(tileCacheDidCancelBackgroundCache:)])
-                                     {
-                                         [_backgroundCacheDelegate tileCacheDidCancelBackgroundCache:weakSelf];
-                                     }
-                                 }
-                             }
-                             @catch (NSException *exception) {
-                                 
-                             }
-                             @finally {
-                                 
-                             }
-                         });
-       });
+//        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(void)
+//       {
+//           dispatch_sync(dispatch_get_main_queue(), ^(void)
+//                         {
+             [_backgroundFetchQueue cancelAllOperations];
+             [_backgroundFetchQueue waitUntilAllOperationsAreFinished];
+             
+             if ([self markCachingComplete])
+             {
+                 if ([_backgroundCacheDelegate respondsToSelector:@selector(tileCacheDidCancelBackgroundCache:)])
+                 {
+                     [_backgroundCacheDelegate tileCacheDidCancelBackgroundCache:self];
+                 }
+             }
+//                         });
+//       });
     }
     @catch (NSException *exception) {
         NSLog(@"This code always crashes...");
