@@ -94,7 +94,7 @@
         [[db executeQuery:@"PRAGMA journal_mode=OFF"] close];
         [[db executeQuery:@"PRAGMA cache_size=100"] close];
         [[db executeQuery:@"PRAGMA count_changes=OFF"] close];
-        [db executeUpdate:@"CREATE TABLE IF NOT EXISTS ZCACHE (tile_hash INTEGER NOT NULL, cache_key VARCHAR(25) NOT NULL, last_used DOUBLE NOT NULL, data BLOB NOT NULL)"];
+        [db executeUpdate:@"CREATE TABLE IF NOT EXISTS ZCACHE (tile_hash INTEGER NOT NULL, cache_key VARCHAR(25) NOT NULL, last_used DOUBLE NOT NULL, data BLOB NOT NULL, x INTEGER NOT NULL, y INTEGER NOT NULL, z INTEGER NOT NULL)"];
         [db executeUpdate:@"CREATE UNIQUE INDEX IF NOT EXISTS main_index ON ZCACHE(tile_hash, cache_key)"];
         [db executeUpdate:@"CREATE INDEX IF NOT EXISTS last_used_index ON ZCACHE(last_used)"];
     }];
@@ -287,7 +287,7 @@
 
             [_queue inDatabase:^(FMDatabase *db)
              {
-                 result = [db executeUpdate:@"INSERT OR IGNORE INTO ZCACHE (tile_hash, cache_key, last_used, data) VALUES (?, ?, ?, ?)", [RMTileCache tileHash:tile], aCacheKey, lastUsedDate, data];
+                 result = [db executeUpdate:@"INSERT OR IGNORE INTO ZCACHE (tile_hash, cache_key, last_used, data, x, y, z) VALUES (?, ?, ?, ?, ?, ?, ?)", [RMTileCache tileHash:tile], aCacheKey, lastUsedDate, data, [NSNumber numberWithInt:tile.x], [NSNumber numberWithInt:tile.y], [NSNumber numberWithShort:tile.zoom]];
              }];
 
             [_writeQueueLock unlock];
